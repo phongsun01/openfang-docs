@@ -113,5 +113,19 @@ docker compose up -d --build
 
 Để dùng gói Coding Plan trong Docker, sếp hãy đảm bảo đã set `DASHSCOPE_API_KEY` trong `.env` và cập nhật file `config.toml` trong thư mục `data` tương tự như phiên bản macOS.
 
+### **📌 9. ĐỒNG BỘ GIỮA CÁC MÁY (MAC <-> WIN)**
+
+Vì sếp đang để thư mục project trong **Box-Box**, việc chuyển sang máy Win cực kỳ đơn giản:
+
+1.  **Tự động đồng bộ**: Toàn bộ source code (đã có sẵn 9router và nút Edit em vừa sửa) sẽ tự chạy sang máy Win qua Box.
+2.  **Chạy trên Win**: Sếp không cần cài Rust hay build tay. Chỉ cần cài **Docker Desktop** trên Windows.
+3.  **Một lệnh duy nhất**: Mở Terminal tại thư mục `repo` trên Windows và gõ:
+    ```bash
+    docker compose up -d --build
+    ```
+    Docker sẽ tự dựng lại bộ máy OpenFang chuẩn chỉnh ngay trên máy văn phòng cho sếp!
+
+---
+
 > [!TIP]
-> Nếu sếp muốn truy cập OpenFang từ mạng ngoài, hãy cân nhắc cấu hình Nginx Reverse Proxy với SSL (Let's Encrypt).
+> Do mình dùng volume `./data:/data`, toàn bộ danh sách Agent và cấu hình cũng sẽ được Box đồng bộ. Sếp tạo Agent ở nhà, lên cơ quan thấy luôn!
