@@ -5,6 +5,12 @@ All notable changes to the OpenFang Documentation will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-03-02
+
+### Added
+- `docker_deployment.md`: Comprehensive guide for deploying OpenFang using Docker and Docker Compose.
+- `upgrade-macos.md`: Step-by-step instructions for upgrading OpenFang on macOS systems.
+
 ## [1.2.0] - 2026-03-02
 
 ### Added

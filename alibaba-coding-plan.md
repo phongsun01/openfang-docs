@@ -42,7 +42,7 @@ Successfully tested the `sk-sp-` key against the Coding Plan endpoint using `cur
 Verified through the OpenFang API:
 - **Agent**: `assistant`
 - **Model**: `qwen3.5-plus`
-- **Response**: "Hi Thẫ̃ ký Fang! 👋 How can I help you today?"
+- **Response**: "Hi Sếp! 👋 How can I help you today?"
 
 ## Known Issues Resolved
 - **invalid_api_key**: Fixed by ensuring the correct subset of the API key was used and refreshing it.
