@@ -48,3 +48,4 @@ Verified through the OpenFang API:
 - **invalid_api_key**: Fixed by ensuring the correct subset of the API key was used and refreshing it.
 - **Endpoint Mismatch**: Fixed by setting the dedicated Coding Plan Singapore endpoint.
 - **Kernel URL Bypass**: Bypassed by moving the URL override into the `[default_model]` section.
+- **Local Quota Exceeded**: If you see "Resource quota exceeded: Token limit exceeded", increase the `max_llm_tokens_per_hour` in your `~/.openfang/agents/<agent_name>/agent.toml` files. OpenFang defaults for small models (like 300k) are easily hit by the high throughput of the Alibaba Coding Plan.
