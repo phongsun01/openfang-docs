@@ -5,6 +5,15 @@ All notable changes to the OpenFang Documentation will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-03-02
+
+### Added
+- `muasamcong_workflows.md`: Detailed procurement monitoring and analysis workflows for muasamcong.mpi.gov.vn.
+
+### Fixed
+- Restored accidentally deleted documentation files (`CHANGELOG.md`, `VERSION`, `workflows.md`) from git history.
+- Reconciled and recreated feature documentation for `add_edit_button.md` and `change_model.md`.
+
 ## [1.1.0] - 2026-03-02
 
 ### Added
