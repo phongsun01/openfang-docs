@@ -5,6 +5,13 @@ All notable changes to the OpenFang Documentation will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-03-04
+
+### Added
+- `openfang_update_monitor_setup.md`: Hướng dẫn chi tiết thiết lập tự động giám sát và push alert update của Github tới Telegram.
+- `skill_deploy_best_practices.md`: Hệ thống hướng dẫn an toàn lưu trữ tuỳ biến của local khỏi bị ghi đè.
+- Bộ tiện ích `scripts/apply_customizations.py`, `post_update.sh`, `post_update.bat` cho phép tự động apply lại toàn bộ Code Modifications đã tuỳ biến lên bản OpenFang cài đặt mới (9router, UI Add Edit Button).
+
 ## [1.3.0] - 2026-03-02
 
 ### Added
