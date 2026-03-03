@@ -5,6 +5,12 @@ All notable changes to the OpenFang Documentation will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.4] - 2026-03-04
+
+### Added
+- `DIRECTORY_MAP.md`: Tài liệu hướng dẫn chi tiết cấu trúc các folder và file trong kho tài liệu.
+- Hoàn tất dọn dẹp các tệp tin dư thừa ở root project.
+
 ## [1.3.3] - 2026-03-04
 
 ### Changed
