@@ -1,0 +1,69 @@
+# Cron Job: OpenFang Update Monitor
+# ─────────────────────────────────
+# File: ~/.openfang/crons/openfang-update-monitor.toml
+# (Copy file này vào đúng vị trí trên máy của anh)
+#
+# Chạy lệnh install:
+#   cp openfang_update_monitor_cron.toml ~/.openfang/crons/openfang-update-monitor.toml
+#   openfang cron reload
+
+[cron]
+name        = "openfang-update-monitor"
+description = "Kiểm tra phiên bản OpenFang mới từ GitHub Releases mỗi ngày 8AM"
+cron        = "0 8 * * *"   # 8:00 AM hàng ngày (timezone hệ thống → Asia/Ho_Chi_Minh)
+enabled     = true
+
+[task]
+type   = "skill"
+skill  = "openfang-update-monitor"
+
+# Agent thực thi task này
+hand   = "assistant"        # Hand mặc định — có thể đổi sang hand chuyên biệt
+
+# Prompt kích hoạt skill
+prompt = """
+Chạy skill openfang-update-monitor:
+1. Kiểm tra GitHub Releases của OpenFang
+2. So sánh với version đã lưu trong memory
+3. Nếu có version mới: lưu file report và gửi Telegram alert
+4. Báo cáo kết quả ngắn gọn
+"""
+
+[output]
+# Lưu output của task (bên cạnh file report trong ~/.openfang/data/openfang-updates/)
+log_dir  = "~/.openfang/logs/crons/"
+log_file = "openfang-update-monitor-{date}.log"
+keep_days = 30   # Giữ log 30 ngày
+
+[alert]
+# Alert nếu bản thân cron bị lỗi (khác với alert "có version mới")
+on_failure = true
+channel    = "telegram"
+# Token/chat_id lấy từ env vars: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID
+failure_message = "⚠️ Cron openfang-update-monitor thất bại — xem log tại ~/.openfang/logs/crons/"
+
+# ─────────────────────────────────
+# HƯỚNG DẪN SETUP
+# ─────────────────────────────────
+#
+# 1. Cấu hình Telegram (nếu chưa có):
+#    → Thêm vào ~/.openfang/.env:
+#       TELEGRAM_BOT_TOKEN="1234567890:ABCdef..."
+#       TELEGRAM_CHAT_ID="-1001234567890"
+#
+# 2. Kiểm tra skill đã install:
+#    openfang skill list | grep openfang-update-monitor
+#
+# 3. Copy và reload cron:
+#    cp docs/openfang_update_monitor_cron.toml ~/.openfang/crons/openfang-update-monitor.toml
+#    openfang cron reload
+#
+# 4. Verify cron sẽ chạy:
+#    openfang cron list
+#    openfang cron status openfang-update-monitor
+#
+# 5. Test chạy ngay (không chờ 8AM):
+#    openfang cron run openfang-update-monitor
+#
+# 6. Xem log:
+#    openfang cron logs openfang-update-monitor --tail 50

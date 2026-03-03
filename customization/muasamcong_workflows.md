@@ -392,3 +392,203 @@ openfang hand pause thau-thau-monitor
 3. **Legal Compliance:** Chỉ thu thập thông tin công khai, không scrape dữ liệu cá nhân
 4. **Data Freshness:** Dữ liệu có thể delay 1-2 ngày so với thực tế
 5. **Backup Channel:** Luôn có kênh thông báo dự phòng (Telegram + Email)
+
+---
+
+## 🔍 **THEO DÕI ĐƠN VỊ CỤ THỂ TRÊN MUASAMCONG.MGI.GOV.VN**
+
+> **Ngữ cảnh:** Theo dõi đơn vị được chỉ định đăng tải **kế hoạch lựa chọn nhà thầu** mới và **thông báo mời thầu** mới.
+
+---
+
+### **PHƯƠNG ÁN A: DÙNG COLLECTOR HAND (KHUYẾN NGHỊ)**
+
+#### **1. Kích hoạt Collector Hand:**
+
+```bash
+openfang hand activate collector
+openfang hand config collector --set target="muasamcong.mpi.gov.vn"
+```
+
+#### **2. Tạo file cấu hình custom:**
+
+Tạo file `~/.openfang/hands/muasamcong-collector/HAND.toml`:
+
+```toml
+name = "muasamcong-monitor"
+version = "1.0.0"
+description = "Monitor kế hoạch lựa chọn nhà thầu và thông báo mời thầu"
+
+[schedule]
+enabled = true
+cron = "0 */2 * * *"  # Chạy mỗi 2 giờ
+
+[target]
+base_url = "https://muasamcong.mpi.gov.vn"
+unit_name = "TÊN ĐƠN VỊ CẦN THEO DÕI"  # Thay bằng tên thật
+keywords = ["kế hoạch lựa chọn nhà thầu", "thông báo mời thầu"]
+
+[filters]
+unit_patterns = [
+    "Bộ Giao thông Vận tải",
+    "UBND Thành phố Hà Nội",
+    # Thêm đơn vị cần monitor
+]
+
+[output]
+format = "markdown"
+save_to = "~/.openfang/data/muasamcong/"
+alert_channels = ["telegram", "email"]
+
+[alert]
+enabled = true
+on_new_item = true
+on_change = true
+```
+
+#### **3. Tạo custom skill:**
+
+```bash
+mkdir -p ~/.openfang/skills/muasamcong-scraper
+```
+
+**`SKILL.toml`:**
+```toml
+name = "muasamcong-scraper"
+version = "1.0.0"
+category = "web-scraping"
+description = "Scraper cho muasamcong.mpi.gov.vn"
+
+[dependencies]
+tools = ["web_fetch", "file_write", "memory_store"]
+
+[config]
+rate_limit = "1 request per 5 seconds"
+retry_count = 3
+timeout = 30
+```
+
+**`SKILL.md`:**
+```markdown
+# Muasamcong Scraper Skill
+
+## Nhiệm vụ
+- Fetch trang muasamcong.mpi.gov.vn
+- Tìm kế hoạch lựa chọn nhà thầu mới
+- Tìm thông báo mời thầu mới
+- Lọc theo đơn vị chỉ định
+- So sánh với dữ liệu cũ, chỉ alert cái MỚI
+
+## Quy trình
+1. Fetch trang chủ hoặc trang tìm kiếm
+2. Parse HTML để extract danh sách thông báo
+3. Lọc theo đơn vị và từ khóa
+4. So sánh với memory (các thông báo đã biết)
+5. Lưu thông báo mới vào memory
+6. Gửi alert nếu có kết quả mới
+
+## Lưu ý
+- Website có thể chặn bot → dùng delay giữa các request
+- Cần xử lý JavaScript → dùng browser tool nếu cần
+- Tôn trọng robots.txt
+```
+
+---
+
+### **PHƯƠNG ÁN B: DÙNG BROWSER HAND (NẾU WEB CẦN JS)**
+
+```bash
+openfang hand activate browser
+openfang hand config browser --set target="muasamcong.mpi.gov.vn"
+```
+
+Browser Hand sẽ mở trang trong headless browser, chờ JS render, rồi extract nội dung.
+
+---
+
+### **PHƯƠNG ÁN C: WORKFLOW CUSTOM**
+
+**`~/.openfang/workflows/muasamcong-monitor.toml`:**
+
+```toml
+name = "muasamcong-monitor"
+description = "Monitor đấu thầu từ muasamcong.mpi.gov.vn"
+
+[trigger]
+type = "cron"
+schedule = "0 */2 * * *"
+
+[[steps]]
+name = "fetch_page"
+agent = "researcher"
+prompt = """
+Fetch trang https://muasamcong.mpi.gov.vn
+Tìm: Kế hoạch lựa chọn nhà thầu, Thông báo mời thầu
+Lọc theo đơn vị: {unit_name}
+"""
+
+[[steps]]
+name = "parse_results"
+agent = "assistant"
+prompt = """
+Parse kết quả từ bước trước, extract các trường:
+- Số thông báo, Tên gói thầu, Đơn vị mời thầu, Ngày đăng, Link chi tiết
+"""
+
+[[steps]]
+name = "compare_with_history"
+agent = "assistant"
+prompt = "So sánh với memory. Chỉ giữ thông báo CHƯA CÓ trong lịch sử."
+
+[[steps]]
+name = "save_and_alert"
+agent = "assistant"
+prompt = """
+Lưu thông báo mới vào memory.
+Gửi alert qua Telegram với: số lượng mới, tóm tắt, link chi tiết.
+"""
+```
+
+---
+
+### **📊 KẾT QUẢ MONG ĐỢI**
+
+```
+📢 ALERT: Đấu thầu mới từ muasamcong.mpi.gov.vn
+
+Đơn vị: Bộ Giao thông Vận tải
+Thời gian phát hiện: 2026-03-02 14:30
+
+📋 Thông báo mới (3):
+
+1. Gói thầu: Xây dựng cầu XYZ
+   - Số TBMT: 2026001234 | Ngày: 2026-03-02 | Giá: 50 tỷ VND
+   - 🔗 https://muasamcong.mpi.gov.vn/...
+
+2. Kế hoạch LCNT: Dự án ABC
+   - Số KHLCNT: 2026005678 | Ngày: 2026-03-01
+   - 🔗 https://muasamcong.mpi.gov.vn/...
+```
+
+---
+
+### **⚠️ Bảng xử lý sự cố**
+
+| Vấn đề | Giải pháp |
+|--------|-----------|
+| Website chặn bot | Dùng Browser Hand (Playwright headless) |
+| Cần JavaScript | Browser Hand với Playwright |
+| Cần đăng nhập | Cấu hình session/cookies trong Browser Hand |
+| CAPTCHA | Cần dịch vụ giải CAPTCHA bên thứ 3 |
+| Rate limiting | Cấu hình `rate_limit` trong skill |
+
+---
+
+### **💡 Câu hỏi để setup chính xác**
+
+Để cấu hình đúng cho sếp, em cần biết:
+
+1. **Tên đơn vị cụ thể** muốn monitor? (VD: "Bộ GTVT", "UBND Hà Nội")
+2. **Tần suất check** mong muốn? (30 phút / 1 giờ / 6 giờ / hàng ngày?)
+3. **Kênh nhận alert** ưa thích? (Telegram / Email / Slack / SMS?)
+4. **Cần lưu trữ lịch sử** không? (để tra cứu hoặc export Excel?)

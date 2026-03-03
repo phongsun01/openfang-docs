@@ -1,0 +1,36 @@
+[[cron]]
+name = "muasamcong-byt-bachmai"
+description = "Monitor KHLCNT và TBMT của Bộ Y tế và BV Bạch Mai trên muasamcong.mpi.gov.vn"
+# Mỗi 2 giờ trong giờ hành chính thứ 2—6
+schedule = "0 7,9,11,13,15,17 * * 1-5"
+enabled = true
+
+[cron.task]
+agent = "collector-hand"
+skill = "muasamcong-monitor"
+prompt = """
+Fetch các trang sau trên muasamcong.mpi.gov.vn:
+1. https://muasamcong.mpi.gov.vn/web/guest/home
+2. Tìm kiếm thông báo mời thầu của "Bộ Y tế"
+3. Tìm kiếm thông báo mời thầu của "Bệnh viện Bạch Mai"
+4. Tìm kiếm kế hoạch lựa chọn nhà thầu của "Bộ Y tế"
+5. Tìm kiếm kế hoạch lựa chọn nhà thầu của "Bệnh viện Bạch Mai"
+
+Đối với mỗi mục tìm thấy:
+- Lấy: số hiệu, tên gói thầu, đơn vị, ngày đăng, giá gói thầu (nếu có), link chi tiết
+- Kiểm tra memory key "muasamcong_byt_bachmai_seen" — bỏ qua mục đã biết
+- Lưu mục mới vào memory
+- Gửi alert qua Telegram cho mục mới
+
+Format alert Telegram:
+🏥 **Đấu thầu mới — {đơn_vị}**
+📋 Loại: {KHLCNT/TBMT}
+📝 {tên_gói_thầu}
+🔢 Mã: {số_hiệu}
+📅 Ngày: {ngày_đăng}
+💰 Giá: {giá_gói_thầu}
+🔗 {link}
+
+Nếu web_fetch trả về HTML rỗng hoặc Angular template ({{variable}}),
+thông báo: "Trang cần JavaScript — cần chuyển sang Browser Hand"
+"""

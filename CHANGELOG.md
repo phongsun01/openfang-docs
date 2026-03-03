@@ -5,6 +5,13 @@ All notable changes to the OpenFang Documentation will be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2026-03-04
+
+### Changed
+- Gộp thư mục `docs/` cũ của mã nguồn vào `openfang-docs`.
+- Tổ chức lại toàn bộ các file hướng dẫn cơ bản (api, kiến trúc, user_guide) vào thư mục mới `tutorial/`.
+- Cập nhật `muasamcong_workflows.md` phiên bản mới nhất kết hợp cron job.
+
 ## [1.3.2] - 2026-03-04
 
 ### Added

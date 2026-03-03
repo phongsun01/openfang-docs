@@ -1,0 +1,67 @@
+# Cấu hình Collector Hand — Monitor Muasamcong
+# Đơn vị: Bộ Y tế, Bệnh viện Bạch Mai
+# Nguồn: https://muasamcong.mpi.gov.vn
+
+[target]
+name = "muasamcong-byt-bachmai"
+urls = [
+    # Trang chính
+    "https://muasamcong.mpi.gov.vn/web/guest/home",
+    # Thông báo mời thầu — tìm theo từ khóa đơn vị
+    "https://muasamcong.mpi.gov.vn/web/guest/home?p_p_id=thongbaomothau_WAR_egpportallcntthongbaomothauportlet&searchType=0",
+    # Kế hoạch lựa chọn nhà thầu
+    "https://muasamcong.mpi.gov.vn/web/guest/ke-hoach-lua-chon-nha-thau",
+]
+
+# --- Bộ lọc theo đơn vị ---
+[filters]
+unit_patterns = [
+    "Bộ Y tế",
+    "BYT",
+    "Bệnh viện Bạch Mai",
+    "BV Bạch Mai",
+]
+# Loại thông báo cần theo dõi
+notification_types = [
+    "ke-hoach-lua-chon-nha-thau",   # KHLCNT
+    "thong-bao-moi-thau",           # TBMT
+]
+
+# --- Lịch chạy ---
+[schedule]
+enabled = true
+# Mỗi 2 giờ trong giờ hành chính (7h-18h, thứ 2-6)
+cron = "0 7,9,11,13,15,17 * * 1-5"
+timezone = "Asia/Ho_Chi_Minh"
+
+# --- Alert ---
+[alert]
+enabled = true
+on_new_item = true
+on_change = false   # Chỉ alert khi có mới, không alert khi thay đổi
+
+[alert.channels]
+telegram = true     # Dùng bot @openfang_med_bot đã cấu hình sẵn
+
+[alert.format]
+language = "vi"
+include_fields = ["so_hieu", "ten_goi_thau", "don_vi", "ngay_dang", "gia_goi_thau", "link"]
+
+# --- Lưu trữ ---
+[storage]
+enabled = true
+save_to = "~/.openfang/data/muasamcong/"
+format = "markdown"
+retention_days = 90  # Lưu 90 ngày
+
+[storage.memory]
+key_seen_ids = "muasamcong_byt_bachmai_seen"   # Key memory lưu các ID đã alert
+key_last_run = "muasamcong_byt_bachmai_lastrun"
+
+# --- Kỹ thuật ---
+[technical]
+rate_limit_seconds = 5          # Delay giữa các request
+timeout_seconds = 30
+retry_count = 3
+user_agent = "Mozilla/5.0 (compatible; OpenFang Monitor)"
+fallback_to_browser = true      # Nếu web_fetch trả về JS template, dùng Browser Hand
