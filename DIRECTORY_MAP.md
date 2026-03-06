@@ -12,6 +12,7 @@ Chứa các bản vá (patch) và cấu hình cá nhân hóa được tạo riê
 - `muasamcong_workflows.md`: Các quy trình theo dõi đấu thầu tự động.
 - `muasamcong_cron.toml`, `openfang_update_monitor_cron.toml`: Các file cấu hình chạy tự động (Crontab).
 - `fix_browser_hand_python_installer.md`: Sửa lỗi cài đặt môi trường cho Browser Hand.
+- `zalo-personal-integration.md`: Quy trình chi tiết tích hợp Zalo Personal qua Bridge Node.js.
 
 ### 📚 `tutorial/`
 Chứa các tài liệu hướng dẫn cơ bản và kiến trúc hệ thống.
@@ -20,7 +21,6 @@ Chứa các tài liệu hướng dẫn cơ bản và kiến trúc hệ thống.
 - `user_guide.md` & `hands_cli_guide.md`: Hướng dẫn sử dụng các kỹ năng tự động (Hands).
 - `architecture.md`: Giải thích cấu trúc kỹ thuật bên trong.
 - `api.md`: Tài liệu kỹ thuật dành cho lập trình viên.
-- `zalo-personal-integration.md`: Quy trình chi tiết tích hợp Zalo Personal qua Bridge Node.js.
 
 ### ⚡ `scripts/`
 Chứa các công cụ tự động hóa để duy trì hệ thống.
