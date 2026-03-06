@@ -20,11 +20,13 @@ Chứa các tài liệu hướng dẫn cơ bản và kiến trúc hệ thống.
 - `user_guide.md` & `hands_cli_guide.md`: Hướng dẫn sử dụng các kỹ năng tự động (Hands).
 - `architecture.md`: Giải thích cấu trúc kỹ thuật bên trong.
 - `api.md`: Tài liệu kỹ thuật dành cho lập trình viên.
+- `zalo-personal-integration.md`: Quy trình chi tiết tích hợp Zalo Personal qua Bridge Node.js.
 
 ### ⚡ `scripts/`
 Chứa các công cụ tự động hóa để duy trì hệ thống.
 - `apply_customizations.py`: Script quan trọng nhất để **tự động nạp lại** các tùy chỉnh UI và Provider sau khi bạn cập nhật phiên bản OpenFang mới từ Github.
 - `post_update.sh`: Script chạy nhanh sau cập nhật để khôi phục trạng thái ổn định.
+- `openfang_watchdog.sh`: "Chó săn" giám sát Bot, tự động khởi động lại nếu Bot treo.
 
 ## 📄 Tập tin gốc (Root)
 

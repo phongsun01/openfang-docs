@@ -23,7 +23,12 @@ def patch_file(filepath, pattern, replacement, check_str, success_msg):
         print(f"  ⚠️ Warning: Không tìm thấy đoạn code cần inject cho {success_msg}")
 
 def main():
-    repo_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    import sys
+    if len(sys.argv) > 1:
+        repo_dir = os.path.abspath(sys.argv[1])
+    else:
+        # Fallback: thư mục hiện tại (nên chạy từ trong `repo/`)
+        repo_dir = os.path.abspath(os.getcwd())
     print(f"📂 Thư mục Repo: {repo_dir}")
     
     mc_types = os.path.join(repo_dir, "crates", "openfang-types", "src", "model_catalog.rs")
@@ -89,18 +94,13 @@ def main():
         shutil.copy2(html, html + ".bak")
         print("  ✅ Tạo backup index_body.html.bak")
 
-    patch_file(html, r'(^ {26}<option value="openai">OpenAI</option>)', r'\1\n                          <option value="9router">9router</option>', 'value="9router"', 'Thêm select box 9router UI.')
+    patch_file(html, r'(<option value="groq">Groq</option>)', r'<option value="9router">9router</option>\n                         \1', 'value="9router"', 'Thêm select box 9router UI.')
 
-    patch_file(html, r'(^ {14}<div class="agent-chip-content">)', r'''\1
-              <button class="btn btn-ghost btn-sm"
-                      @click.stop="showDetail(agent)"
-                      title="Edit Agent"
-                      style="padding: 4px; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin-left: auto;">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                </svg>
-              </button>''', '@click.stop="showDetail(agent)"', 'Thêm UI nút Edit vào card agent.')
+    patch_file(html, r'(<span class="badge" :class=)',
+        r'''<button class="btn btn-ghost btn-sm" @click.stop="showDetail(agent)" title="Edit Agent" style="padding:4px;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                </button>
+                \1''', 'showDetail(agent)', 'Thêm UI nút Edit vào card agent.')
 
     print("\n=========================================")
     print("✅ Hoàn tất cấu hình. Vui lòng cargo build --release để áp dụng lại.")
