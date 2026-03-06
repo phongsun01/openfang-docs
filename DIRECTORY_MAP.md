@@ -13,6 +13,7 @@ Chứa các bản vá (patch) và cấu hình cá nhân hóa được tạo riê
 - `muasamcong_cron.toml`, `openfang_update_monitor_cron.toml`: Các file cấu hình chạy tự động (Crontab).
 - `fix_browser_hand_python_installer.md`: Sửa lỗi cài đặt môi trường cho Browser Hand.
 - `zalo-personal-integration.md`: Quy trình chi tiết tích hợp Zalo Personal qua Bridge Node.js.
+- `watchdog-setup.md`: Hướng dẫn chi tiết tác dụng và cách cài đặt "Chó săn" giám sát Bot.
 
 ### 📚 `tutorial/`
 Chứa các tài liệu hướng dẫn cơ bản và kiến trúc hệ thống.
